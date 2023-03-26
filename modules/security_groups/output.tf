@@ -21,3 +21,15 @@ output "docker-prod_sg" {
 output "docker-stage_sg" {
   value = aws_security_group.OAPACPUJP_docker-stage_sg.id
 }
+
+output "docker_stage_lb_sg" {
+  value = aws_security_group.OAPACPUJP_docker_stage_lb_sg.id
+}
+
+output "docker_prod_lb_sg" {
+  value = aws_security_group.OAPACPUJP_docker_prod_lb_sg.id
+}
+
+output "jenkins_lb_sg" {
+  value = aws_security_group.OAPACPUJP_jenkins_lb_sg.id
+}

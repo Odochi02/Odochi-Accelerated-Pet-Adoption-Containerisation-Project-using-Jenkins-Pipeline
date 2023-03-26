@@ -80,7 +80,7 @@ ingress {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
 }
    
   ingress {
@@ -88,7 +88,7 @@ ingress {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_ansible_sg.id]
   }
 
   ingress {
@@ -96,15 +96,15 @@ ingress {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_prod_lb_sg.id]
     }
 
   ingress {
-    description      = "HTTPS"
+    description      = "APPLICATION"
     from_port        = 8080
     to_port          = 8080
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_prod_lb_sg.id]
   }
 
   egress {
@@ -131,7 +131,7 @@ ingress {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
 }
    
   ingress {
@@ -139,15 +139,15 @@ ingress {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_ansible_sg.id]
   }
 
   ingress {
-    description      = "HTTPS"
-    from_port        = 443
-    to_port          = 443
+    description      = "HTTP"
+    from_port        = 80
+    to_port          = 80
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_prod_lb_sg.id]
   }
 
 ingress {
@@ -155,15 +155,15 @@ ingress {
     from_port        = 8080
     to_port          = 8080
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_stage_lb_sg.id]
 }
 
 ingress {
-    description      = "APPLICATION"
+    description      = "HTTP"
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_stage_lb_sg.id]
 }
 
 ingress {
@@ -171,7 +171,7 @@ ingress {
     from_port        = 8085
     to_port          = 8085
     protocol         = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_docker_stage_lb_sg.id]
 }
   egress {
     from_port        = 0
@@ -212,6 +212,38 @@ resource "aws_security_group" "OAPACPUJP_bastion_sg" {
   }
 }
 
+#creating jenkins lb security group 
+resource "aws_security_group" "OAPACPUJP_jenkins_lb_sg" {
+  name        = "OAPACPUJP_jenkins_lb_sg"
+  description = "Allow Jenkins traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "Proxy Traffic"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "OAPACPUJP_jenkins_lb_sg"
+  }
+}
+
 # Create Jenkins Security Group
 resource "aws_security_group" "OAPACPUJP_jenkins_sg" {
   name        = "OAPACPUJP_jenkins_sg"
@@ -219,26 +251,20 @@ resource "aws_security_group" "OAPACPUJP_jenkins_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Port traffic"
-    from_port   = 8080
-    to_port     = 8080
+    description = "Proxy traffic"
+    from_port   = var.jenkins_port
+    to_port     = var.jenkins_port
     protocol    = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_jenkins_lb_sg.id]
   }
 
+
   ingress {
-    description = "Allow http traffic"
-    from_port   = 80
-    to_port     = 80
+    description = "Allow SSH traffic"
+    from_port   = var.ssh_port
+    to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = [var.all_ip]
-  }
-  ingress {
-    description = "Allow ssh traffic"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
   }
 
   egress {
@@ -253,4 +279,70 @@ resource "aws_security_group" "OAPACPUJP_jenkins_sg" {
     Name = "OAPACPUJP_jenkins_sg"
   }
   }
+
+  #creating docker stage lb security group 
+resource "aws_security_group" "OAPACPUJP_docker_stage_lb_sg" {
+  name        = "var.vpc_id_docker_stage_lb_sg"
+  description = "Allow Docker traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "Proxy Traffic"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "OAPACPUJP_docker_stage_lb_sg"
+  }
+}
+
+#creating docker prod lb security group 
+resource "aws_security_group" "OAPACPUJP_docker_prod_lb_sg" {
+  name        = "OAPACPUJP_docker_prod_lb_sg"
+  description = "Allow Docker traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "Proxy Traffic"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "OAPACPUJP_docker_prod_lb_sg"
+  }
+}
+
+
 
