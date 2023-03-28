@@ -28,6 +28,15 @@ variable "OAPACPUJPpubsub1_id" {
 variable "OAPACPUJPpubsub2_id" {
 }
 
+#private subnet 1 id
+variable "OAPACPUJPprvsub1_id" {
+}
+
+
+#private subnet 2 id
+variable "OAPACPUJPprvsub2_id" {
+}
+
 #prv_key
 variable "prv_key" {
 }
@@ -35,3 +44,8 @@ variable "prv_key" {
 #security group
 variable "docker_prod_lb_sg" {
 }
+
+variable "docker-prod-lb-name" {
+    default = "docker-prod-lb"
+}
+

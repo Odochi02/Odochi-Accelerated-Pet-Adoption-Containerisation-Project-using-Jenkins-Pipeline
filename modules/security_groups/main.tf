@@ -37,7 +37,7 @@ resource "aws_security_group" "OAPACPUJP_sonarqube_sg" {
     from_port        = var.sonarqube_port
     to_port          = var.sonarqube_port
     protocol         = "tcp"
-    cidr_blocks = ["129.205.113.155/32"] # my computer ip address
+    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
   }
 
   ingress {
@@ -45,7 +45,7 @@ resource "aws_security_group" "OAPACPUJP_sonarqube_sg" {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = ["129.205.113.155/32"] # my computer ip address
+    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
   }
 
   ingress {
@@ -197,7 +197,7 @@ resource "aws_security_group" "OAPACPUJP_bastion_sg" {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = ["129.205.113.155/32"] # my computer ip address
+    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
   }
   
   egress {

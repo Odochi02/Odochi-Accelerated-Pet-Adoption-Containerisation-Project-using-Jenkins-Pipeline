@@ -85,6 +85,11 @@ variable "ami_redhat" {
   default = "ami-05c96317a6278cfaa"
 }
 
+#ami
+variable "ami_ubuntu" {
+  default = "ami-0fdf70ed5c34c5f52"
+}
+
 #instance type
 variable "instance_type" {
   default = "t2.medium"

@@ -28,10 +28,18 @@ variable "OAPACPUJPpubsub1_id" {
 variable "OAPACPUJPpubsub2_id" {
 }
 
+#public subnet 2 id
+variable "OAPACPUJPprvsub1_id" {
+}
+
 #prv_key
 variable "prv_key" {
 }
 
 #security group
 variable "docker_stage_lb_sg" {
+}
+
+variable "docker-stage-lb-name" {
+    default = "docker-stage-lb"
 }

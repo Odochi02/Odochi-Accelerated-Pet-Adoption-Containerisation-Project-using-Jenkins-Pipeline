@@ -29,6 +29,10 @@ variable "OAPACPUJPpubsub1_id" {
 variable "OAPACPUJPpubsub2_id" {
 }
 
+#private subnet 1 id
+variable "OAPACPUJPprvsub1_id" {
+}
+
 #prv_key
 variable "prv_key" {
 }
@@ -37,4 +41,6 @@ variable "prv_key" {
 variable "jenkins_lb_sg" {
 }
 
-
+variable "jenkins-lb-name" {
+    default = "jenkins-lb"
+}

@@ -32,11 +32,11 @@ module "keypair" {
 module "ansible" {
   source           = "../../modules/ansible"
   keypair          = module.keypair.OAPACPUJP_pub_key
-  ami_redhat              = var.ami_redhat
+  ami_ubuntu              = var.ami_ubuntu
   instance_type    = var.instance_type
   ansible_sg       = module.security_groups.ansible_sg
   vpc_id   = module.vpc.vpc_id
-  OAPACPUJPpubsub1_id = module.subnets.pubsub_1
+  OAPACPUJPprvsub1_id = module.subnets.prvsub_1
   prv_key          = module.keypair.prv_key
   newrelic = "../../modules/ansible/newrelic.yml"
   dockerfile = "../../modules/ansible/dockerfile"
@@ -57,6 +57,7 @@ module "jenkins" {
   jenkins_lb_sg = module.security_groups.jenkins_lb_sg
   OAPACPUJPpubsub1_id = module.subnets.pubsub_1
   OAPACPUJPpubsub2_id = module.subnets.pubsub_2
+  OAPACPUJPprvsub1_id = module.subnets.prvsub_1
   vpc_id   = module.vpc.vpc_id
 }
 
@@ -70,6 +71,8 @@ module "docker-prod" {
   docker_prod_lb_sg       = module.security_groups.docker_prod_lb_sg
   OAPACPUJPpubsub1_id = module.subnets.pubsub_1
   OAPACPUJPpubsub2_id = module.subnets.pubsub_2
+  OAPACPUJPprvsub1_id = module.subnets.prvsub_1
+  OAPACPUJPprvsub2_id = module.subnets.prvsub_2
   vpc_id   = module.vpc.vpc_id
 }
 
@@ -83,6 +86,7 @@ module "docker-stage" {
   docker_stage_lb_sg       = module.security_groups.docker_stage_lb_sg
   OAPACPUJPpubsub1_id = module.subnets.pubsub_1
   OAPACPUJPpubsub2_id = module.subnets.pubsub_2
+  OAPACPUJPprvsub1_id = module.subnets.prvsub_1
   vpc_id   = module.vpc.vpc_id
 }
 
