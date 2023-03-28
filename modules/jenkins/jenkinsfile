@@ -2,63 +2,50 @@ pipeline{
     agent any
     tools {
     maven 'maven'
-  }
-  
-    stages{
-        stage('Pull Source Code from GitHub') {
-            steps {
-                git branch: 'kenny',
-                credentialsId: 'git',
-                url: 'https://github.com/CloudHight/Set_5_Pet_Adoption_Application_Team_3.git'
+    }
+    stages {
+        stage ('Git Checkout'){
+            steps{
+                git branch: 'kubernetes', credentialsId: 'git-cred', url: 'https://github.com/CloudHight/Set_5_Pet_Adoption_Application_Team_3.git'
             }
         }
-        
-        stage('Code Analysis') {
-            steps {
-                withSonarQubeEnv('sonar') {
+        stage('Code Analysis'){
+            steps{
+                withSonarQubeEnv('sonared') {
                 sh "mvn sonar:sonar -Dsonar.java.binaries=target/classes"
                 }
-            }   
+            }
         }
-        
-        stage('Code Quality Approval') {
-            steps {
-                waitForQualityGate abortPipeline: true,
-                credentialsId: 'sonar'
+        stage('BuildCode'){
+            steps{
+               sh 'mvn package -Dmaven.test.skip'
             }
         }
 
-            
-        stage('Build Code') {
-            steps {
-              sh 'mvn package -Dmaven.test.skip'
+        stage('Send artifacts to Ansible ServerDockerBuild'){
+            steps{
+                sshagent([jenkins-key])
+                sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/pipeline/target/spring-petclinic-2.4.2.war ubuntu@10.0.3.216:/etc/ansible'
             }
         }
-        
-        stage('Send Artifacts to Ansible Server') {
-            steps { 
-                sshagent(['jenkins']) {
-                    sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/petadoption/target/spring-petclinic-2.4.2.war  ec2-user@13.40.84.145:/opt/docker'
-                }
+         stage('Trigger stage playbooks'){
+            steps{
+                sshagent([jenkins-key])
+                sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.0.3.216:| "ansible-playbook -i /etc/ansible/hosts /etc/ansible/docker-image.yml && ansible-playbook -i /etc/ansible/hosts /etc/ansible/docker-stage.yml"'
             }
         }
-        
-        stage('Trigger Stage Playbooks') {
-            steps { 
-                sshagent(['jenkins']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.40.84.145 "ansible-playbook -i /etc/ansible/hosts /opt/docker/docker-image.yml && ansible-playbook -i /etc/ansible/hosts /opt/docker/docker-stage.yml"'
-                }
-            }
-        }
-        stage ('Deploy To Prod'){
+
+
+        stage('Trigger prod playbooks'){
             input{
-                message "Do you want to proceed for production deployment?"
-           }
-            steps { 
-                sshagent(['jenkins-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.40.84.145 "ansible-playbook -i /etc/ansible/hosts /opt/docker/docker-prod.yml"'
-                }
+                message 'Do you want to proceed with deployment/"'
+            }
+            steps{
+                sshagent([jenkins-key])
+                sh 'ssh -o StrictHostKeyChecking=no ubuntu@10.0.3.216:| "ansible-playbook -i /etc/ansible/hosts /etc/ansible/docker-prod.yml"'
             }
         }
-    }
+
+    }  
+
 }

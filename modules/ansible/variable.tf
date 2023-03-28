@@ -11,8 +11,9 @@ variable "keypair" {
 variable "ansible_sg" {
 }
 
+
 #ami
-variable "ami_redhat" {
+variable "ami_ubuntu" {
 }
 
 #instance type
@@ -20,8 +21,8 @@ variable "instance_type" {
 }
 
 
-#public subnet id
-variable "OAPACPUJPpubsub1_id" {
+#private subnet id
+variable "OAPACPUJPprvsub1_id" {
 }
 
 #prv_key
