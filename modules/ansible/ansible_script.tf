@@ -1,22 +1,23 @@
 locals {
   ansible_user_data = <<-EOF
 #!/bin/bash
+sudo apt-get update -y
+sudo apt install docker.io -y
 sudo apt-get install software-properties-common -y
 sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt install ansible
+sudo apt-get install ansible -y
 echo "pubkeyAcceptKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config.d/10-insecure-rsa-keysig.conf
 sudo systemctl reload sshd
 sudo bash -c ' echo "strictHostKeyChecking No" >> /etc/ssh/ssh_config'
-echo "${var.prv_key}" >> /home/ubuntu/.ssh/accepet-key
-
-sudo chmod 400 OAPACPUJP_prv
+echo "${var.prv_key}" >> /home/ubuntu/.ssh/OAPACPUJP-key
 sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/OAPACPUJP-key 
 sudo chgrp ubuntu:ubuntu /home/ubuntu/.ssh/OAPACPUJP-key  
-sudo chmod /home/ubuntu/.ssh/OAPACPUJP-key 
+sudo chmod 400 /home/ubuntu/.ssh/OAPACPUJP-key 
 sudo echo "localhost ansible_connection=local" > /etc/ansible/hosts
 sudo echo "[docker-stage]" >> /etc/ansible/hosts
-sudo echo "${var.docker_stage_IP} ansible_ssh_private_key_file=/home/ubuntu/.ssh/OAPACPUJP-key" >> /etc/ansible/hosts
+sudo echo "${var.docker_stage_IP} ansible_user=ec2-user ansible_ssh_private_key_file=/home/ubuntu/.ssh/OAPACPUJP-key" >> /etc/ansible/hosts
 sudo echo "[docker-prod]" >> /etc/ansible/hosts
+sudo echo "${var.docker_prod_IP} ansible_user=ec2-user ansible_ssh_private_key_file=/home/ubuntu/.ssh/OAPACPUJP-key" >> /etc/ansible/hosts
 sudo chown -R ubuntu:ubuntu /etc/ansible
 sudo touch docker_image.yml docker_prod.yml docker_stage.yml dockerfile
 echo "${file(var.docker-image)}" >> /etc/ansible/hosts/docker-image.yml
@@ -26,6 +27,8 @@ echo "${file(var.dockerfile)}" >> /etc/ansible/hosts/dockerfile
 sudo hostnamectl set-hostname Ansible
 EOF
 }
+
+
 
 /*echo "${local.ec2_creds.pass}" >> /home/ubuntu/only.text*/
 

@@ -1,6 +1,6 @@
 #create sonarqube server
 resource "aws_instance" "OAPACPUJP_sonarqube" {
-  ami                       = var.ami_redhat
+  ami                       = var.ami_ubuntu
   instance_type               = var.instance_type
   subnet_id                   = var.OAPACPUJPpubsub1_id
   associate_public_ip_address = true

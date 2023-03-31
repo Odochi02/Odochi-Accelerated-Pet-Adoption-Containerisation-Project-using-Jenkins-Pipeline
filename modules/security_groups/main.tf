@@ -10,7 +10,7 @@ resource "aws_security_group" "OAPACPUJP_ansible_sg" {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = [var.all_ip]
+    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
   }
 
   egress {
@@ -37,7 +37,7 @@ resource "aws_security_group" "OAPACPUJP_sonarqube_sg" {
     from_port        = var.sonarqube_port
     to_port          = var.sonarqube_port
     protocol         = "tcp"
-    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
+    cidr_blocks = [var.all_ip]
   }
 
   ingress {
@@ -45,7 +45,7 @@ resource "aws_security_group" "OAPACPUJP_sonarqube_sg" {
     from_port        = var.ssh_port
     to_port          = var.ssh_port
     protocol         = "tcp"
-    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
+    cidr_blocks = [var.all_ip]
   }
 
   ingress {
@@ -53,7 +53,7 @@ resource "aws_security_group" "OAPACPUJP_sonarqube_sg" {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    security_groups = [aws_security_group.OAPACPUJP_jenkins_sg.id]
+    cidr_blocks = [var.all_ip]
   }
 
   egress {
@@ -197,7 +197,7 @@ resource "aws_security_group" "OAPACPUJP_bastion_sg" {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = ["197.211.53.54/32"] # my computer ip address
+    cidr_blocks = ["0.0.0.0/0"] # my computer ip address
   }
   
   egress {
@@ -255,7 +255,7 @@ resource "aws_security_group" "OAPACPUJP_jenkins_sg" {
     from_port   = var.jenkins_port
     to_port     = var.jenkins_port
     protocol    = "tcp"
-    security_groups = [aws_security_group.OAPACPUJP_jenkins_lb_sg.id]
+    cidr_blocks = [var.all_ip]
   }
 
 
@@ -264,7 +264,7 @@ resource "aws_security_group" "OAPACPUJP_jenkins_sg" {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
+    cidr_blocks = [var.all_ip]
   }
 
   egress {
