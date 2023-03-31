@@ -14,7 +14,7 @@ resource "aws_instance" "OAPACPUJP_docker_prod" {
 }
 
 /*data "aws_secretsmanager_secret_version" "mycred" {
-  secret_id = "dre-pass"
+  secret_id = "pass"
 }
 
 locals {

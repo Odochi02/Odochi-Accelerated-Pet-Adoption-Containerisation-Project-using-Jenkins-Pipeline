@@ -141,3 +141,17 @@ variable "dockerfile" {
   default = ""
 }
 
+
+
+#target group
+variable "OAPACPUJP-docker-prod-tg" {
+}
+
+#certificate
+variable "acm-certificate" {
+}
+
+#docker prod
+variable "docker_prod" {
+
+}

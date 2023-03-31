@@ -24,7 +24,7 @@ resource "aws_lb" "OAPACPUJP-docker-stage-lb" {
 
 
   tags = {
-    Environment = "production"
+    Environment = "stageuction"
   }
 }
 #creating load balancer listener

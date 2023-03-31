@@ -94,7 +94,7 @@ module "sonarqube" {
   source           = "../../modules/sonarqube"
   keypair          = module.keypair.OAPACPUJP_pub_key
   prv_key          = module.keypair.prv_key
-  ami_redhat              = var.ami_redhat
+  ami_ubuntu             = var.ami_ubuntu
   instance_type    = var.instance_type
   sonarqube_sg       = module.security_groups.sonarqube_sg
   OAPACPUJPpubsub1_id = module.subnets.pubsub_1
@@ -110,3 +110,23 @@ module "bastion" {
   bastion_sg       = module.security_groups.bastion_sg
   OAPACPUJPpubsub1_id = module.subnets.pubsub_1
 }
+
+/*module "route53" {
+  source = "../../Modules/route53"
+  docker-prod-lb-dns = module.docker-prod.docker-prod-lb.dns_name
+  docker-prod-lb-zone-id = module.docker-prod.docker-prod-lb-zone-id
+  
+}
+module "ASG" {
+  source = "../../modules/ASG"
+  keypair          = module.keypair.OAPACPUJP_pub_key
+   ami_redhat               = var.ami_redhat
+  instance_type = var.instance_type
+  docker-prod_sg       = module.security_groups.docker-prod_sg
+  OAPACPUJPpubsub1_id = [module.subnet.pubsub_1, module.subnet.pubsub_2]
+  OAPACPUJP-tgarn = module.lb.target_group_arn
+}*/
+
+
+
+

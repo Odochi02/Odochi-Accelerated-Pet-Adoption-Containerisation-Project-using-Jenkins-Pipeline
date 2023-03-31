@@ -12,7 +12,7 @@ variable "sonarqube_sg" {
 }
 
 #ami
-variable "ami_redhat" {
+variable "ami_ubuntu" {
 }
 
 #instance type

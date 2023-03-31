@@ -3,8 +3,7 @@ output "ansible_IP" {
   description = "Ansible private IP"
 }
 
-
-/*output "ansible_id" {
+  /*output "ansible_id" {
     value = aws_instance.ansible-server.id
 
-} */
+}*/

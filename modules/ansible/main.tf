@@ -40,12 +40,3 @@ resource "aws_instance" "OAPACPUJP_ansible" {
   }
 
 }
-
-
-/*data "aws_secretsmanager_secret_version" "mycred" {
-  secret_id = "dre-pass"
-}
-
-locals {
-  ec2_creds =jsondecode(data.aws_secretsmanager_secret_version.mycred.secret_string)
-}*/
