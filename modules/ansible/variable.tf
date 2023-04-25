@@ -57,3 +57,19 @@ variable "newrelic" {
 #dockerfile.yml
 variable "dockerfile" {
 }
+
+#lb security group
+variable "ansible_lb_sg" {
+}
+
+variable "ansible-lb-name" {
+    default = "ansible-lb"
+}
+
+#public subnet 1 id
+variable "OAPACPUJPpubsub1_id" {
+}
+
+#public subnet 2 id
+variable "OAPACPUJPpubsub2_id" {
+}

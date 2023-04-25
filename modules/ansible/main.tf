@@ -6,7 +6,7 @@ resource "aws_instance" "OAPACPUJP_ansible" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [var.ansible_sg]
   key_name                    = var.keypair
-  iam_instance_profile = aws_iam_instance_profile.OAPACPUJP-IAM-profile.id
+  iam_instance_profile = aws_iam_instance_profile.OAPACPUJP-IAM-profile1.id
   user_data                   = local.ansible_user_data
   
   # Connection Through SSH

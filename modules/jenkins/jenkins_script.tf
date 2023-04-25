@@ -32,15 +32,9 @@ sudo systemctl start docker
 sudo usermod -aG docker jenkins
 sudo usermod -aG docker ec2-user
 
-#changing ssh configs
-sudo service sshd restart
-sudo bash -c ' echo "StrictHostKeyChecking No" >> /etc/ssh/ssh_config'
-
-#Install New relic
-sudo curl -o /etc/yum.repos.d/newrelic-infra.repo https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64/newrelic-infra.repo
-sudo yum -q makecache -y --disablerepo='*' --enablerepo='newrelic-infra'
-sudo yum install newrelic-infra -y
-echo "license_key: eu01xx26f63c4044f9057a5877073cc5a801NRAL| sudo tee -a /etc/newrelic-infra.yml
+ #changing ssh configs
+# sudo service sshd restart
+# sudo bash -c ' echo "StrictHostKeyChecking No" >> /etc/ssh/ssh_config'
 
 
 echo "***********private key in new file***********"
@@ -56,5 +50,4 @@ echo "****************Change Hostname(IP) to something readable**************"
 sudo hostnamectl set-hostname Jenkins
 sudo reboot
 EOF
-
 }

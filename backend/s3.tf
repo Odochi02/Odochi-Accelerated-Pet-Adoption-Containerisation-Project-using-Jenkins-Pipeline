@@ -3,15 +3,15 @@ resource "aws_s3_bucket" "oapacpujp-backend" {
   bucket = "oapacpujp-backend"
   force_destroy = true
   tags = {
-    Name        = "OAPACPUJP-backend"
+    Name        = "oapacpujp-backend"
   }
 }
 
-# Creating the backend S3 Bucket acl
+/*# Creating the backend S3 Bucket acl
 resource "aws_s3_bucket_acl" "oapacpujp-acl-s3" {
   bucket = aws_s3_bucket.oapacpujp-backend.id
   acl    = "private"
-}
+}*/
 
 # DynamoDB Table
 resource "aws_dynamodb_table" "tflock" {
