@@ -4,15 +4,32 @@ resource "aws_security_group" "OAPACPUJP_ansible_sg" {
   description = "Allow inbound traffic"
   vpc_id      = var.vpc_id
 
+ingress {
+    description      = "SSH"
+    from_port        = var.ssh_port
+    to_port          = var.ssh_port
+    protocol         = "tcp"
+    cidr_blocks = [var.all_ip]
+  }
+
 
   ingress {
     description = "Allow ssh traffic"
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id]
+    security_groups = [aws_security_group.OAPACPUJP_bastion_sg.id] # only be able to ssh to bastion
   }
 
+  ingress {
+    description = "Allow ssh traffic"
+    from_port   = var.ssh_port
+    to_port     = var.ssh_port
+    protocol    = "tcp"
+    security_groups = [aws_security_group.OAPACPUJP_jenkins_sg.id] # only be able to ssh to jenkins
+
+  }
+ 
   egress {
     from_port   = 0
     to_port     = 0
@@ -344,5 +361,35 @@ resource "aws_security_group" "OAPACPUJP_docker_prod_lb_sg" {
   }
 }
 
+#creating ansible lb security group 
+resource "aws_security_group" "OAPACPUJP_ansible_lb_sg" {
+  name        = "OAPACPUJP_ansible_lb_sg"
+  description = "Allow ansible traffic"
+  vpc_id      = var.vpc_id
 
+  ingress {
+    description = "Proxy Traffic"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "OAPACPUJP_ansible_lb_sg"
+  }
+}
 

@@ -33,3 +33,7 @@ output "docker_prod_lb_sg" {
 output "jenkins_lb_sg" {
   value = aws_security_group.OAPACPUJP_jenkins_lb_sg.id
 }
+
+output "ansible_lb_sg" {
+  value = aws_security_group.OAPACPUJP_ansible_lb_sg.id
+}

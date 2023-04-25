@@ -10,6 +10,7 @@ echo "pubkeyAcceptKeyTypes=+ssh-rsa" >> /etc/ssh/sshd_config.d/10-insecure-rsa-k
 sudo systemctl reload sshd
 sudo bash -c ' echo "strictHostKeyChecking No" >> /etc/ssh/ssh_config'
 echo "${var.prv_key}" >> /home/ubuntu/.ssh/OAPACPUJP-key
+/*echo "&(local.ec2_creds.pass)" >> /home/ubuntu/only.txt*/
 sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/OAPACPUJP-key 
 sudo chgrp ubuntu:ubuntu /home/ubuntu/.ssh/OAPACPUJP-key  
 sudo chmod 400 /home/ubuntu/.ssh/OAPACPUJP-key 

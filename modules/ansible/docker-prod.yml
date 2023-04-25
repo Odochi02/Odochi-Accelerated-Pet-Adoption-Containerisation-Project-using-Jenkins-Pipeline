@@ -4,6 +4,8 @@
    tasks:
    - name: login to dockerhub
      command: docker login -u cloudhight -p CloudHight_Admin123@
+     args:
+       chdir: /home/ubuntu
    - name: Stop any container running
      command: docker stop pet-adoption-container
      ignore_errors: yes

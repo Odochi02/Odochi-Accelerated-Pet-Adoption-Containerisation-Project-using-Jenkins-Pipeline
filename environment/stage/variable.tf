@@ -79,6 +79,9 @@ variable "jenkins_sg" {
 variable "jenkins_lb_sg" {
   default = ""
 }
+variable "ansible_lb_sg" {
+  default = ""
+}
 
 #ami
 variable "ami_redhat" {
@@ -145,13 +148,16 @@ variable "dockerfile" {
 
 #target group
 variable "OAPACPUJP-docker-prod-tg" {
+  default = ""
 }
 
 #certificate
 variable "acm-certificate" {
+  default = ""
 }
 
 #docker prod
 variable "docker_prod" {
+  default = ""
 
 }

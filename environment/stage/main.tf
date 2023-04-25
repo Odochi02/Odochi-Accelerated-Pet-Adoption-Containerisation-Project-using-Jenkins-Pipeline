@@ -35,8 +35,11 @@ module "ansible" {
   ami_ubuntu              = var.ami_ubuntu
   instance_type    = var.instance_type
   ansible_sg       = module.security_groups.ansible_sg
+  ansible_lb_sg = module.security_groups.ansible_lb_sg
   vpc_id   = module.vpc.vpc_id
   OAPACPUJPprvsub1_id = module.subnets.prvsub_1
+  OAPACPUJPpubsub1_id = module.subnets.pubsub_1
+  OAPACPUJPpubsub2_id = module.subnets.pubsub_2
   prv_key          = module.keypair.prv_key
   newrelic = "../../modules/ansible/newrelic.yml"
   dockerfile = "../../modules/ansible/dockerfile"

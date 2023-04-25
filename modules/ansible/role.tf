@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "k8s-policy-role-attach" {
 }
 
 # Create IAM instance profile to be attached to our Ansible Node
-resource "aws_iam_instance_profile" "OAPACPUJP-IAM-profile" {
-  name = "OAPACPUJP-Node-profile"
+resource "aws_iam_instance_profile" "OAPACPUJP-IAM-profile1" {
+  name = "OAPACPUJP-IAM-profile1"
   role = aws_iam_role.OAPACPUJP-role.name
 }

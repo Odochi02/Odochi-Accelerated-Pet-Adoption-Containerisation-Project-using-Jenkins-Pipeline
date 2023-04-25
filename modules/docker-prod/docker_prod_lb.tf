@@ -30,8 +30,11 @@ resource "aws_lb" "OAPACPUJP-docker-prod-lb" {
 #creating load balancer listener
 resource "aws_lb_listener" "OAPACPUJP-docker-prod-listener" {
   load_balancer_arn = aws_lb.OAPACPUJP-docker-prod-lb.arn
-  port              = "80"
+  port              = "80"                                                   
+  /*port = "443"*/
   protocol          = "HTTP"
+  /*ssl_policy = "ELBSecurityPolicy-2016-08"*/
+  /*certificate_arn = "$(var.acm_certificate)"*/
 
 
   default_action {

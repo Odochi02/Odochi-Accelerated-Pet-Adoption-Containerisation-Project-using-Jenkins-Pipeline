@@ -5,10 +5,12 @@
    tasks:
    - name: login to dockerhub
      command: docker login -u cloudhight -p CloudHight_Admin123@
+     args:
+       chdir: /home/ubuntu
    - name: Create docker image from Pet Adoption war file
      command: docker build -t pet-adoption-image .
      args:
-       chdir: /opt/docker
+       chdir: /etc/ansible
    - name: Add tag to image
      command: docker tag pet-adoption-image cloudhight/pet-adoption-image
    - name: Push image to docker hub
